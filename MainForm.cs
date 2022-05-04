@@ -133,27 +133,50 @@ namespace Simulator
             switch (cboxAlgorithm.Text)
             {
                 case "Bubble Sort":
-                    t = new Thread(delegate () { s.BubbleSort(sortOrder); });
+                    t = new Thread(delegate ()
+                    {
+                        s.BubbleSort(sortOrder);
+                        MessageBox.Show("Sorted!", "Bubble Sort", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    });
                     t.Start();
                     break;
+
                 case "Insertion Sort":
-                    t = new Thread(delegate () { s.InsertionSort(sortOrder); });
+                    t = new Thread(delegate ()
+                    {
+                        s.InsertionSort(sortOrder);
+                        MessageBox.Show("Sorted!", "Insertion Sort", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    });
                     t.Start();
                     break;
+
                 case "Merge Sort":
-                    t = new Thread(delegate () { s.InsertionSort(sortOrder); });
-                    MessageBox.Show("Sorted!", "Merge Sort", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    t = new Thread(delegate ()
+                    {
+                        s.MergeSort(sortOrder, r.Elements, 0, r.Elements.Count - 1);
+                        MessageBox.Show("Sorted!", "Merge Sort", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    });
                     t.Start();
                     break;
+
                 case "Selection Sort":
-                    t = new Thread(delegate () { s.SelectionSort(sortOrder); });
+                    t = new Thread(delegate ()
+                    {
+                        s.SelectionSort(sortOrder);
+                        MessageBox.Show("Sorted!", "Selection Sort", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    });
                     t.Start();
                     break;
+
                 case "Quick Sort":
-                    s.QuickSort(sortOrder, r.Elements, 0, r.Elements.Count - 1);
-                    MessageBox.Show("Sorted!", "Quick Sort", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    t = new Thread(delegate ()
+                    {
+                        s.QuickSort(sortOrder, r.Elements, 0, r.Elements.Count - 1);
+                        MessageBox.Show("Sorted!", "Quick Sort", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    });
                     t.Start();
                     break;
+
                 default:
                     MessageBox.Show("Select an algorithm to Start", "", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     break;
