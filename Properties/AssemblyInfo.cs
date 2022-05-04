@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Simulator")]
-[assembly: AssemblyDescription("Algorithm Simulator for Quick,Selection,Bubble and Insertion sort")]
+[assembly: AssemblyDescription("Algorithm Simulator for some Sorting Algorithms")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Haritha Wickremasinghe")]
+[assembly: AssemblyCompany("moshi moshi team")]
 [assembly: AssemblyProduct("Simulator")]
-[assembly: AssemblyCopyright("Copyright ©  2013 Haritha Wickremasinghe")]
+[assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
