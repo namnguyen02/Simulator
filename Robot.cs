@@ -241,8 +241,12 @@ namespace Simulator
             g.DrawLine(p, point2, point4);
             g.DrawLine(p, point3, point4);
 
-            //string s = ((val1 > val2) ? val1 + " > " + val2 : ((val1 < val2) ? val1 + " < " + val2 : " = "));
-            g.DrawString("compare", new Font("Arial", 12, FontStyle.Regular), new SolidBrush(Color.Black), new Point((x1 + x2 - 70) / 2, y1 - 45));
+            int val1 = int.Parse(l1.Text);
+            int val2 = int.Parse(l2.Text);
+
+            string s = (val2 < val1) ? l2.Text + " < " + l1.Text : ((val2 > val1) ? l2.Text + " > " + l1.Text : l2.Text + " = " + l1.Text);
+            int lengthLabel = (s.Length == 7) ? 58 : ((s.Length == 6) ? 50 : 40);
+            g.DrawString(s, new Font("Arial", 12, FontStyle.Regular), new SolidBrush(Color.Black), new Point((x1 + x2 - lengthLabel) / 2, y1 - 45));
 
             Suspend(delay);
 
