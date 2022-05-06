@@ -136,6 +136,7 @@ namespace Simulator
                     t = new Thread(delegate ()
                     {
                         s.BubbleSort(sortOrder);
+                        r.RefreshBackColor();
                         MessageBox.Show("Sorted!", "Bubble Sort", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     });
                     t.Start();
@@ -145,6 +146,7 @@ namespace Simulator
                     t = new Thread(delegate ()
                     {
                         s.InsertionSort(sortOrder);
+                        r.RefreshBackColor();
                         MessageBox.Show("Sorted!", "Insertion Sort", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     });
                     t.Start();
@@ -154,6 +156,7 @@ namespace Simulator
                     t = new Thread(delegate ()
                     {
                         s.MergeSort(sortOrder, r.Elements, 0, r.Elements.Count - 1);
+                        r.RefreshBackColor();
                         MessageBox.Show("Sorted!", "Merge Sort", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     });
                     t.Start();
@@ -163,6 +166,7 @@ namespace Simulator
                     t = new Thread(delegate ()
                     {
                         s.SelectionSort(sortOrder);
+                        r.RefreshBackColor();
                         MessageBox.Show("Sorted!", "Selection Sort", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     });
                     t.Start();
@@ -172,6 +176,7 @@ namespace Simulator
                     t = new Thread(delegate ()
                     {
                         s.QuickSort(sortOrder, r.Elements, 0, r.Elements.Count - 1);
+                        r.RefreshBackColor();
                         MessageBox.Show("Sorted!", "Quick Sort", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     });
                     t.Start();

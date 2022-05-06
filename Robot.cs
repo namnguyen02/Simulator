@@ -222,6 +222,15 @@ namespace Simulator
         }
 
         [Obsolete]
+        public void RefreshBackColor()
+        {
+            for (int i = 0; i < Elements.Count; i++)
+            {
+                ChangeBackColor(Elements[i].Value, Color.FromArgb(116, 185, 255));
+            }
+        }
+
+        [Obsolete]
         public int Compare(Label l1, Label l2)
         {
             Graphics g = container.CreateGraphics();
@@ -244,7 +253,7 @@ namespace Simulator
             int val1 = int.Parse(l1.Text);
             int val2 = int.Parse(l2.Text);
 
-            string s = (val2 < val1) ? l2.Text + " < " + l1.Text : ((val2 > val1) ? l2.Text + " > " + l1.Text : l2.Text + " = " + l1.Text);
+            string s = (val2 < val1) ? l2.Text + " < " + l1.Text : ((val2 > val1) ? l2.Text + " > " + l1.Text : "equal");
             int lengthLabel = (s.Length == 7) ? 58 : ((s.Length == 6) ? 50 : 40);
             g.DrawString(s, new Font("Arial", 12, FontStyle.Regular), new SolidBrush(Color.Black), new Point((x1 + x2 - lengthLabel) / 2, y1 - 45));
 
