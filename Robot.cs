@@ -237,9 +237,9 @@ namespace Simulator
             Pen p = new Pen(Color.Black, 2);
 
             int x1 = l1.Location.X + l1.Size.Width / 2;
-            int y1 = l1.Location.Y - 15;
+            int y1 = l1.Location.Y - 20;
             int x2 = l2.Location.X + l2.Size.Width / 2;
-            int y2 = l2.Location.Y - 15;
+            int y2 = l2.Location.Y - 20;
 
             Point point1 = new Point(x1, y1);
             Point point2 = new Point(x2, y2);
@@ -253,8 +253,8 @@ namespace Simulator
             int val1 = int.Parse(l1.Text);
             int val2 = int.Parse(l2.Text);
 
-            string s = (val2 < val1) ? l2.Text + " < " + l1.Text : ((val2 > val1) ? l2.Text + " > " + l1.Text : "equal");
-            int lengthLabel = (s.Length == 7) ? 58 : ((s.Length == 6) ? 50 : 40);
+            string s = (val2 < val1) ? l2.Text + " is smaller" : ((val2 > val1) ? l2.Text + " is greater" : "equal");
+            int lengthLabel = (s.Length == 13) ? 100 : ((s.Length == 12) ? 92 : 48);
             g.DrawString(s, new Font("Arial", 12, FontStyle.Regular), new SolidBrush(Color.Black), new Point((x1 + x2 - lengthLabel) / 2, y1 - 45));
 
             Suspend(delay);
@@ -271,9 +271,9 @@ namespace Simulator
             Pen p = new Pen(Color.Black, 2);
 
             int x1 = l1.Location.X + l1.Size.Width / 2;
-            int y1 = l1.Location.Y - 15;
+            int y1 = l1.Location.Y - 20;
             int x2 = l2.Location.X + l2.Size.Width / 2;
-            int y2 = l2.Location.Y - 15;
+            int y2 = l2.Location.Y - 20;
 
             Point point1 = new Point(x1, y1);
             Point point2 = new Point(x2, y2);
@@ -284,15 +284,29 @@ namespace Simulator
             g.DrawLine(p, point2, point4);
             g.DrawLine(p, point3, point4);
 
+            Point point5 = new Point(x1 - 5, y1 - 5);
+            Point point6 = new Point(x1 + 5, y1 - 5);
+            Point point7 = new Point(x2 - 5, y2 - 5);
+            Point point8 = new Point(x2 + 5, y2 - 5);
+
+            g.DrawLine(p, point1, point5);
+            g.DrawLine(p, point1, point6);
+            g.DrawLine(p, point2, point7);
+            g.DrawLine(p, point2, point8);
+
             g.DrawString("swap", new Font("Arial", 12, FontStyle.Regular), new SolidBrush(Color.Black), new Point((x1 + x2 - 44) / 2, y1 - 45));
 
             Suspend(delay);
 
+            Color ctemp = l1.BackColor;
             Size stemp = l1.Size;
             string ttemp = l1.Text;
 
             container.Invoke(new Action(delegate ()
             {
+                l1.BackColor = l2.BackColor;
+                l2.BackColor = ctemp;
+
                 l1.Size = l2.Size;
                 l2.Size = stemp;
 
@@ -312,9 +326,9 @@ namespace Simulator
             Pen p = new Pen(Color.Black, 2);
 
             int x1 = lf.Location.X + lf.Size.Width / 2;
-            int y1 = lf.Location.Y - 15;
+            int y1 = lf.Location.Y - 20;
             int x2 = lt.Location.X + lt.Size.Width / 2;
-            int y2 = lt.Location.Y - 15;
+            int y2 = lt.Location.Y - 20;
 
             Point point1 = new Point(x1, y1);
             Point point2 = new Point(x2, y2);

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Windows.Forms;
 
 namespace Simulator
 {
@@ -9,15 +8,13 @@ namespace Simulator
     {
         readonly Robot r;
 
-        public Sort(Robot r)
-        {
-            this.r = r;
-        }
+        public Sort(Robot r) => this.r = r;
 
-        readonly Color Red = Color.FromArgb(237, 76, 103);
         readonly Color Blue = Color.FromArgb(116, 185, 255);
         readonly Color Green = Color.FromArgb(0, 184, 148);
-        readonly Color Yellow = Color.FromArgb(255, 211, 42);
+        readonly Color Purple = Color.FromArgb(162, 155, 254);
+        readonly Color Red = Color.FromArgb(255, 118, 117);
+        readonly Color Yellow = Color.FromArgb(253, 203, 110);
 
         // This is a implementation that explains how a sorting algorithm works.
         // It is not the optimized algorithm implementation.
@@ -46,13 +43,6 @@ namespace Simulator
 
                 r.ChangeBackColor(r.Elements[j].Value, Yellow, true);
             }
-
-            for (i = 0; i < size; i++)
-            {
-                r.ChangeBackColor(r.Elements[i].Value, Blue);
-            }
-
-            MessageBox.Show("Sorted!", "Bubble Sort", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         [Obsolete]
@@ -104,13 +94,6 @@ namespace Simulator
             }
 
             temp.Remove();
-
-            for (i = 0; i < size; i++)
-            {
-                r.ChangeBackColor(r.Elements[i].Value, Blue);
-            }
-
-            MessageBox.Show("Sorted!", "Insertion Sort", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         [Obsolete]
@@ -151,13 +134,6 @@ namespace Simulator
 
                 r.ChangeBackColor(r.Elements[i].Value, Yellow, true);
             }
-
-            for (i = 0; i < size; i++)
-            {
-                r.ChangeBackColor(r.Elements[i].Value, Blue);
-            }
-
-            MessageBox.Show("Sorted!", "Selection Sort", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         public void MergeSort(Func<Robot.IPointable, Robot.IPointable, bool> sortOrder, List<Robot.Element> A, int lo, int hi)
@@ -168,29 +144,45 @@ namespace Simulator
         [Obsolete]
         public void QuickSort(Func<Robot.IPointable, Robot.IPointable, bool> sortOrder, List<Robot.Element> A, int lo, int hi)
         {
-            if (lo >= hi) return;
+            if (lo <= hi)
+            {
+                int pi = Partition(sortOrder, A, lo, hi);
 
-            int p = Partition(sortOrder, A, lo, hi);
-
-            QuickSort(sortOrder, A, lo, p);
-            QuickSort(sortOrder, A, p + 1, hi);
+                QuickSort(sortOrder, A, lo, pi - 1);
+                QuickSort(sortOrder, A, pi + 1, hi);
+            }
         }
 
         [Obsolete]
         private int Partition(Func<Robot.IPointable, Robot.IPointable, bool> sortOrder, List<Robot.Element> A, int lo, int hi)
         {
-            // Use Hoare Partition
-            int pivot = (hi + lo) / 2;
-            int i = lo - 1;
-            int j = hi + 1;
+            int storeIndex = lo + 1;
 
-            while (true)
+            if (lo != hi)
             {
-                do { i++; } while (sortOrder(A[pivot], A[i]));
-                do { j--; } while (sortOrder(A[j], A[pivot]));
-                if (i >= j) return j;
-                r.Swap(A[i].Value, A[j].Value);
+                Robot.Element pivot = A[lo];
+                r.ChangeBackColor(pivot.Value, Red, true);
+
+                for (int i = lo + 1; i <= hi; i++)
+                {
+                    r.ChangeBackColor(A[i].Value, Purple);
+
+                    if (sortOrder.Invoke(pivot, A[i]))
+                    {
+                        if (i != storeIndex) r.Swap(A[i].Value, A[storeIndex].Value);
+                        r.ChangeBackColor(A[storeIndex].Value, Green);
+                        storeIndex++;
+                    }
+                }
+
+                if (storeIndex != lo + 1) r.Swap(A[storeIndex - 1].Value, pivot.Value);
+
+                for (int i = lo; i <= hi; i++) r.ChangeBackColor(A[i].Value, Blue);
             }
+
+            r.ChangeBackColor(A[storeIndex - 1].Value, Yellow, true);
+
+            return storeIndex - 1;
         }
     }
 }
