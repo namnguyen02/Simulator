@@ -48,18 +48,17 @@ namespace Simulator
         [Obsolete]
         public void InsertionSort(Func<Robot.IPointable, Robot.IPointable, bool> sortOrder)
         {
-            int i, j;
             int size = r.Elements.Count;
             Robot.Temp temp = new Robot.Temp(r, null, null);
 
             r.ChangeBackColor(r.Elements[0].Value, Yellow, true);
 
-            for (i = 1; i < size; i++)
+            for (int i = 1; i < size; i++)
             {
                 r.ChangeBackColor(r.Elements[i].Value, Red);
                 r.Move(r.Elements[i].Value, temp.Value);
 
-                j = i - 1;
+                int j = i - 1;
 
                 while (j >= 0)
                 {
@@ -67,19 +66,16 @@ namespace Simulator
 
                     if (sortOrder.Invoke(r.Elements[j], temp))
                     {
-                        r.Move(r.Elements[j].Value, r.Elements[j + 1].Value, false);
+                        r.Move(r.Elements[j].Value, r.Elements[j + 1].Value);
 
-                        if (j > 0)
-                        {
-                            r.ChangeBackColor(r.Elements[j + 1].Value, Yellow);
-                        }
+                        if (j > 0) r.ChangeBackColor(r.Elements[j + 1].Value, Yellow);
 
                         j -= 1;
                     }
                     else break;
                 }
 
-                r.Move(temp.Value, r.Elements[j + 1].Value, false);
+                r.Move(temp.Value, r.Elements[j + 1].Value);
 
                 if (j + 1 == 0)
                 {
@@ -91,6 +87,62 @@ namespace Simulator
                     r.ChangeBackColor(r.Elements[j].Value, Yellow);
                     r.ChangeBackColor(r.Elements[j + 1].Value, Yellow, true);
                 }
+            }
+
+            temp.Remove();
+        }
+
+        [Obsolete]
+        public void ShellSort(Func<Robot.IPointable, Robot.IPointable, bool> sortOrder)
+        {
+            int size = r.Elements.Count;
+
+            if (size == 1) InsertionSort(sortOrder);
+
+            for (int k = size / 2; k > 0; k /= 2)
+            {
+                for (int segment = 0; segment < k; segment++)
+                {
+                    for (int i = segment; i < size; i += k) r.ChangeBackColor(r.Elements[i].Value, Purple, i + k >= size);
+                    
+                    if (k == 1)
+                    {
+                        InsertionSort(sortOrder);
+                    }
+                    else
+                    {
+                        SortSegment(sortOrder, segment, k);
+                        for (int i = segment; i < size; i += k) r.ChangeBackColor(r.Elements[i].Value, Blue);
+                    }
+                }
+            }
+        }
+
+        [Obsolete]
+        private void SortSegment(Func<Robot.IPointable, Robot.IPointable, bool> sortOrder, int segment, int k)
+        {
+            int size = r.Elements.Count;
+            Robot.Temp temp = new Robot.Temp(r, null, null);
+
+            for (int curr = segment + k; curr < size; curr += k)
+            {
+                r.ChangeBackColor(r.Elements[curr].Value, Red);
+                r.Move(r.Elements[curr].Value, temp.Value);
+
+                int step = curr - k;
+
+                while (step >= 0)
+                {
+                    if (sortOrder.Invoke(r.Elements[step], temp))
+                    {
+                        r.Move(r.Elements[step].Value, r.Elements[step + k].Value);
+                        step -= k;
+                    }
+                    else break;
+                }
+
+                r.Move(temp.Value, r.Elements[step + k].Value);
+                r.ChangeBackColor(r.Elements[step + k].Value, Purple, true);
             }
 
             temp.Remove();
@@ -136,7 +188,21 @@ namespace Simulator
             }
         }
 
+        [Obsolete]
         public void MergeSort(Func<Robot.IPointable, Robot.IPointable, bool> sortOrder, List<Robot.Element> A, int lo, int hi)
+        {
+            if (lo <= hi)
+            {
+                int m = (lo + hi) / 2;
+
+                MergeSort(sortOrder, A, lo, m);
+                MergeSort(sortOrder, A, m + 1, hi);
+
+                Merge(sortOrder, A, lo, m, hi);
+            }
+        }
+
+        private void Merge(Func<Robot.IPointable, Robot.IPointable, bool> sortOrder, List<Robot.Element> A, int lo, int m, int hi)
         {
 
         }
@@ -165,12 +231,12 @@ namespace Simulator
 
                 for (int i = lo + 1; i <= hi; i++)
                 {
-                    r.ChangeBackColor(A[i].Value, Purple);
+                    r.ChangeBackColor(A[i].Value, Green);
 
                     if (sortOrder.Invoke(pivot, A[i]))
                     {
                         if (i != storeIndex) r.Swap(A[i].Value, A[storeIndex].Value);
-                        r.ChangeBackColor(A[storeIndex].Value, Green);
+                        r.ChangeBackColor(A[storeIndex].Value, Purple);
                         storeIndex++;
                     }
                 }

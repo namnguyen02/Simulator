@@ -237,9 +237,9 @@ namespace Simulator
             Pen p = new Pen(Color.Black, 2);
 
             int x1 = l1.Location.X + l1.Size.Width / 2;
-            int y1 = l1.Location.Y - 20;
+            int y1 = l1.Location.Y - 15;
             int x2 = l2.Location.X + l2.Size.Width / 2;
-            int y2 = l2.Location.Y - 20;
+            int y2 = l2.Location.Y - 15;
 
             Point point1 = new Point(x1, y1);
             Point point2 = new Point(x2, y2);
@@ -271,9 +271,9 @@ namespace Simulator
             Pen p = new Pen(Color.Black, 2);
 
             int x1 = l1.Location.X + l1.Size.Width / 2;
-            int y1 = l1.Location.Y - 20;
+            int y1 = l1.Location.Y - 15;
             int x2 = l2.Location.X + l2.Size.Width / 2;
-            int y2 = l2.Location.Y - 20;
+            int y2 = l2.Location.Y - 15;
 
             Point point1 = new Point(x1, y1);
             Point point2 = new Point(x2, y2);
@@ -320,15 +320,15 @@ namespace Simulator
         }
 
         [Obsolete]
-        public void Move(Label lf, Label lt, bool d = true)
+        public void Move(Label lf, Label lt)
         {
             Graphics g = container.CreateGraphics();
             Pen p = new Pen(Color.Black, 2);
 
             int x1 = lf.Location.X + lf.Size.Width / 2;
-            int y1 = lf.Location.Y - 20;
+            int y1 = lf.Location.Y - 15;
             int x2 = lt.Location.X + lt.Size.Width / 2;
-            int y2 = lt.Location.Y - 20;
+            int y2 = lt.Location.Y - 15;
 
             Point point1 = new Point(x1, y1);
             Point point2 = new Point(x2, y2);
@@ -364,8 +364,6 @@ namespace Simulator
 
                 container.Refresh();
             }));
-
-            if (d) Suspend(delay);
         }
     }
 }

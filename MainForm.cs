@@ -172,6 +172,16 @@ namespace Simulator
                     t.Start();
                     break;
 
+                case "Shell Sort":
+                    t = new Thread(delegate ()
+                    {
+                        s.ShellSort(sortOrder);
+                        r.RefreshBackColor();
+                        MessageBox.Show("Sorted!", "Shell Sort", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    });
+                    t.Start();
+                    break;
+
                 case "Quick Sort":
                     t = new Thread(delegate ()
                     {

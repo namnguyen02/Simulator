@@ -268,6 +268,7 @@
             "Insertion Sort",
             "Merge Sort",
             "Selection Sort",
+            "Shell Sort",
             "Quick Sort"});
             this.cboxAlgorithm.Location = new System.Drawing.Point(200, 50);
             this.cboxAlgorithm.Name = "cboxAlgorithm";
