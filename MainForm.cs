@@ -5,17 +5,20 @@ using System.Windows.Forms;
 
 namespace Simulator
 {
-    public partial class MainFrom : Form
+    public partial class MainForm : Form
     {
         Sort s;
         Robot r;
-        Thread t;
+        Thread _thread;
+
         Func<Robot.IPointable, Robot.IPointable, bool> sortOrder;   // Currently selected sort order
         Func<Robot.IPointable, Robot.IPointable, bool> ascending;   // Function pointer for ascending sorting
         Func<Robot.IPointable, Robot.IPointable, bool> descending;  // Function pointer for descending sorting
+        
+        bool isRunning;
 
         [Obsolete]
-        public MainFrom()
+        public MainForm()
         {
             InitializeComponent();
             DoubleBuffered = true;
@@ -24,7 +27,7 @@ namespace Simulator
         [Obsolete]
         private void CreateRobot()
         {
-            string[] input = txtValues.Text.Split(','); // Get values from user
+            string[] input = txtValue.Text.Split('\u002C'); // Get values from user
 
             r = new Robot(RobotContainer, input)        // Create new robot
             {
@@ -37,41 +40,42 @@ namespace Simulator
             ascending = (Pointable1, Pointable2) => r.Compare(Pointable1.Value, Pointable2.Value) > 0;
             descending = (Pointable1, Pointable2) => r.Compare(Pointable1.Value, Pointable2.Value) < 0;
 
-            sortOrder = ascending;  // defalut sort order is ascending
+            sortOrder = ascending;  // default sort order is ascending
+            isRunning = false;
         }
 
         [Obsolete]
         private void ThreadAbort()
         {
-            if (t != null)
+            if (_thread != null)
             {
                 try
                 {
-                    t.Abort();
+                    _thread.Abort();
                 }
                 catch (ThreadStateException)
                 {
-                    t.Resume();
+                    _thread.Resume();
                 }
 
-                t = null;
+                _thread = null;
             }
         }
 
-        private void GenerateRandomValues()
+        private void GenerateRandomValue()
         {
-            Random rand = new Random();
+            Random rnd = new Random();
             StringBuilder sb = new StringBuilder();
 
             for (int i = 0; i < 10; i++)
             {
-                sb.Append((int)(rand.NextDouble() * 100)).Append(',');
+                sb.Append(rnd.Next(99)).Append('\u002C');
             }
 
-            txtValues.Text = sb.Remove(sb.Length - 1, 1).ToString();
+            txtValue.Text = sb.Remove(sb.Length - 1, 1).ToString();
         }
 
-        private void ToolStripStatusLabel3_Click(object sender, EventArgs e)
+        private void LblAbout_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Team: moshi moshi\nCourse: MT2039\n", "About", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
@@ -87,24 +91,14 @@ namespace Simulator
         }
 
         [Obsolete]
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            GenerateRandomValues();
-            CreateRobot();
-        }
-
-        [Obsolete]
         private void BtnRandom_Click(object sender, EventArgs e)
         {
             ThreadAbort();
 
-            for (int i = RobotContainer.Controls.Count - 1; i >= 0; i--)
-            {
-                RobotContainer.Controls.RemoveAt(i);
-            }
-
+            RobotContainer.Controls.Clear();
             RobotContainer.Refresh();
-            GenerateRandomValues();
+
+            GenerateRandomValue();
             CreateRobot();
         }
 
@@ -113,18 +107,18 @@ namespace Simulator
         {
             ThreadAbort();
 
-            for (int i = RobotContainer.Controls.Count - 1; i >= 0; i--)
-            {
-                RobotContainer.Controls.RemoveAt(i);
-            }
-
+            RobotContainer.Controls.Clear();
             RobotContainer.Refresh();
+
             CreateRobot();
         }
 
         [Obsolete]
         private void BtnStart_Click(object sender, EventArgs e)
         {
+            if (isRunning) return;
+
+            isRunning = true;
             lblSort.Text = cboxAlgorithm.Text;
 
             ThreadAbort();
@@ -133,67 +127,68 @@ namespace Simulator
             switch (cboxAlgorithm.Text)
             {
                 case "Bubble Sort":
-                    t = new Thread(delegate ()
+                    _thread = new Thread(delegate ()
                     {
                         s.BubbleSort(sortOrder);
                         r.RefreshBackColor();
                         MessageBox.Show("Sorted!", "Bubble Sort", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     });
-                    t.Start();
+                    _thread.Start();
                     break;
 
                 case "Insertion Sort":
-                    t = new Thread(delegate ()
+                    _thread = new Thread(delegate ()
                     {
                         s.InsertionSort(sortOrder);
                         r.RefreshBackColor();
                         MessageBox.Show("Sorted!", "Insertion Sort", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     });
-                    t.Start();
+                    _thread.Start();
                     break;
 
                 case "Merge Sort":
-                    t = new Thread(delegate ()
+                    _thread = new Thread(delegate ()
                     {
                         s.MergeSort(sortOrder, r.Elements, 0, r.Elements.Count - 1);
                         r.RefreshBackColor();
                         MessageBox.Show("Sorted!", "Merge Sort", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     });
-                    t.Start();
+                    _thread.Start();
                     break;
 
                 case "Selection Sort":
-                    t = new Thread(delegate ()
+                    _thread = new Thread(delegate ()
                     {
                         s.SelectionSort(sortOrder);
                         r.RefreshBackColor();
                         MessageBox.Show("Sorted!", "Selection Sort", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     });
-                    t.Start();
+                    _thread.Start();
                     break;
 
                 case "Shell Sort":
-                    t = new Thread(delegate ()
+                    _thread = new Thread(delegate ()
                     {
                         s.ShellSort(sortOrder);
                         r.RefreshBackColor();
                         MessageBox.Show("Sorted!", "Shell Sort", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     });
-                    t.Start();
+                    _thread.Start();
                     break;
 
                 case "Quick Sort":
-                    t = new Thread(delegate ()
+                    _thread = new Thread(delegate ()
                     {
                         s.QuickSort(sortOrder, r.Elements, 0, r.Elements.Count - 1);
                         r.RefreshBackColor();
                         MessageBox.Show("Sorted!", "Quick Sort", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     });
-                    t.Start();
+                    _thread.Start();
                     break;
 
                 default:
                     MessageBox.Show("Select an algorithm to Start", "", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    isRunning = false;
                     break;
             }
         }
@@ -201,17 +196,17 @@ namespace Simulator
         [Obsolete]
         private void BtnPauseResume_Click(object sender, EventArgs e)
         {
-            if (t != null && t.ThreadState != ThreadState.Stopped)
+            if (_thread != null && _thread.ThreadState != ThreadState.Stopped)
             {
                 r.pauseMarker = false;
 
-                if (t.ThreadState == ThreadState.Suspended)
+                if (_thread.ThreadState == ThreadState.Suspended)
                 {
-                    t.Resume();
+                    _thread.Resume();
                 }
                 else
                 {
-                    t.Suspend();
+                    _thread.Suspend();
                 }
             }
             else
@@ -223,23 +218,30 @@ namespace Simulator
         [Obsolete]
         private void BtnStep_Click(object sender, EventArgs e)
         {
-            if (t != null && t.ThreadState != ThreadState.Stopped)
+            if (_thread != null && _thread.ThreadState != ThreadState.Stopped)
             {
                 r.pauseMarker = true;
 
-                if (t.ThreadState == ThreadState.Suspended)
+                if (_thread.ThreadState == ThreadState.Suspended)
                 {
-                    t.Resume();
+                    _thread.Resume();
                 }
                 else
                 {
-                    t.Suspend();
+                    _thread.Suspend();
                 }
             }
             else
             {
                 MessageBox.Show("Play an algorithm to Step", "", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
+        }
+
+        [Obsolete]
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            GenerateRandomValue();
+            CreateRobot();
         }
 
         [Obsolete]
