@@ -172,6 +172,13 @@ namespace Simulator
                     R.container.Controls.RemoveAt(R.container.Controls.Count - 1);
                 }));
             }
+            public void RemoveMerge()
+            {
+                R.container.Invoke(new Action(delegate ()
+                {
+                    R.container.Controls.Remove(Value);
+                }));
+            }
         }
 
         public void RemoveTemp(Temp t)

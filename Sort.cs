@@ -9,7 +9,7 @@ namespace Simulator
         readonly Robot r;
 
         public Sort(Robot r) => this.r = r;
-
+        public List<Robot.Temp> SortMerge;
         readonly Color Blue = Color.FromArgb(116, 185, 255);
         readonly Color Green = Color.FromArgb(0, 184, 148);
         readonly Color Purple = Color.FromArgb(162, 155, 254);
@@ -104,7 +104,7 @@ namespace Simulator
                 for (int segment = 0; segment < k; segment++)
                 {
                     for (int i = segment; i < size; i += k) r.ChangeBackColor(r.Elements[i].Value, Purple, i + k >= size);
-                    
+
                     if (k == 1)
                     {
                         InsertionSort(sortOrder);
@@ -191,7 +191,7 @@ namespace Simulator
         [Obsolete]
         public void MergeSort(Func<Robot.IPointable, Robot.IPointable, bool> sortOrder, List<Robot.Element> A, int lo, int hi)
         {
-            if (lo <= hi)
+            if (lo < hi)
             {
                 int m = (lo + hi) / 2;
 
@@ -201,10 +201,84 @@ namespace Simulator
                 Merge(sortOrder, A, lo, m, hi);
             }
         }
+        [Obsolete]
+        public void CreatMerge(int count)
+        {
+            SortMerge = r.Temps;
+            int X_Red, X_Green;
+            int j = 0;
 
+            for (int i = 0; i < count; i++)
+            {
+                SortMerge.Add(new Robot.Temp(r, null, null));
+            }
+
+            for (int i = 0; i < r.Elements.Count; i++, j++)
+            {
+                X_Red = 255 - 20 * j;
+                X_Green = 100 + 10 * j;
+                if (X_Red < 0 || X_Green > 255)
+                {
+                    j = 0;
+                    X_Red = 255;
+                    X_Green = 100;
+                }
+                r.ChangeBackColor(r.Elements[i].Value, Color.FromArgb(X_Red, X_Green, 40));
+            }
+        }
+        [Obsolete]
+        public void ClearMerge()
+        {
+            for (int i = 1; i < SortMerge.Count; i++)
+            {
+                SortMerge[i].RemoveMerge();
+            }
+            SortMerge[0].Remove();
+            SortMerge.Clear();
+        }
+        [Obsolete]
         private void Merge(Func<Robot.IPointable, Robot.IPointable, bool> sortOrder, List<Robot.Element> A, int lo, int m, int hi)
         {
+            int i = lo, j = m + 1, k = 0;
 
+            Color tmp = r.Elements[lo].Value.BackColor;
+            while (i <= m && j <= hi)
+            {
+                if (sortOrder.Invoke(A[i], A[j]))
+                {
+                    r.ChangeBackColor(A[j].Value, Red);
+                    r.Move(r.Elements[j].Value, SortMerge[k].Value);
+                    ++j;
+                }
+                else
+                {
+                    r.ChangeBackColor(r.Elements[i].Value, Red);
+                    r.Move(r.Elements[i].Value, SortMerge[k].Value);
+                    ++i;
+                }
+                ++k;
+            }
+            while (i <= m)
+            {
+                r.ChangeBackColor(r.Elements[i].Value, Red);
+                r.Move(r.Elements[i].Value, SortMerge[k].Value);
+                ++i;
+                ++k;
+            }
+
+            while (j <= hi)
+            {
+                r.ChangeBackColor(r.Elements[j].Value, Red);
+                r.Move(r.Elements[j].Value, SortMerge[k].Value);
+                ++j;
+                ++k;
+            }
+            while (k > 0)
+            {
+                --k;
+                r.Move(SortMerge[k].Value, r.Elements[lo + k].Value);
+                r.ChangeBackColor(r.Elements[lo + k].Value, tmp);
+            }
         }
 
         [Obsolete]

@@ -149,9 +149,10 @@ namespace Simulator
                 case "Merge Sort":
                     _thread = new Thread(delegate ()
                     {
+                        s.CreatMerge(r.Elements.Count);
                         s.MergeSort(sortOrder, r.Elements, 0, r.Elements.Count - 1);
+                        s.ClearMerge();
                         r.RefreshBackColor();
-                        MessageBox.Show("Sorted!", "Merge Sort", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     });
                     _thread.Start();
                     break;
